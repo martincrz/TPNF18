@@ -1,0 +1,119 @@
+@startuml
+abstract Individu<<abstract>>{
+id : int
+nom : varchar
+prenom : varchar
+dateNaiss : date
+adresse : varchar
+numtel : long int{10}
+}
+note left : id {key}
+
+class Client {
+}
+
+class Personnel {
+poste : emploi
+}
+
+enum emploi{
+veterinaire
+assistant
+}
+
+Individu <|-- Client
+Individu <|-- Personnel
+
+class Patient {
+nom : varchar
+dateNaiss : int{4}
+num_puce : long int
+num_pass : long int
+}
+note left : nom{key}
+
+Client " 1 .. n " -- " 1 .. n " Patient
+(Client, Patient)..etre_proprietaire
+
+class etre_proprietaire{
+dateDebut : date
+dateFin : date
+}
+
+class Espece{
+nom : varchar
+}
+note left : nom {key}
+
+Patient " * " --right " 1 " Espece :   etre de >
+
+Personnel " *  " -- "   * " Espece : specialiser >
+
+Patient " * " --  " 1 .. n " Personnel
+(Patient, Personnel)..suivre
+note left : que par un veterinaire
+
+class suivre{
+debut : date
+fin : date
+}
+
+class Medicament{
+nom_mol : varchar
+effets : text
+}
+note left : nom_mol{key}
+
+Medicament " * " -- " * " Espece : autoriser >
+
+Patient *-- "*" EntreeSaisie : > posseder
+
+abstract EntreeSaisie<<abstract>>{
+num : int
+heureSaisie : hour
+dateSaisie : date
+}
+note left : num {key}
+
+EntreeSaisie <|-- Traitement
+EntreeSaisie <|-- Mesure
+EntreeSaisie <|-- Procedure
+EntreeSaisie <|-- Observation
+EntreeSaisie <|-- ResultatAnalyse
+
+class Mesure{
+taille : int
+poids : int
+}
+note left: (taille,poids) NOT NULL
+
+class Traitement{
+dateDebut : date
+dateFin : date
+duree() : temps
+}
+
+Traitement "*" -- "1 .. n" Medicament
+(Traitement, Medicament).prescrire
+
+class prescrire{
+quantite : int
+}
+note right: que par véto
+
+prescrire "*" --right "1" Personnel  : par >
+
+class ResultatAnalyse{
+resultat : text
+}
+
+class Observation{
+description: text
+}
+
+Observation "*" -- "1" Personnel : realiser >
+
+class Procedure{
+description : text
+}
+@enduml
