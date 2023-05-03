@@ -1,5 +1,5 @@
 # TPNF18
-NF18 - Conception d'une BDD relationnel pour une agence de vétérinaire
+NF18 - Conception d'une BDD relationnelle pour une agence de vétérinaire
 
 ## Name
 VetoGestion
